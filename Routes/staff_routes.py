@@ -7,7 +7,7 @@ from authentication import *
 from middleware import *
 from Services.user_services import *
 from Services.staff_services import *
-from MongoDB.schemas import  UserOut, UserCreate
+from DB.schemas import  UserOut, UserCreate
 from configurations import get_medicine_collection, get_prescription_collection, get_user_collection
 
 staff_router = APIRouter()

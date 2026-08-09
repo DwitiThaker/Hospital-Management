@@ -5,7 +5,7 @@ from jwt import ExpiredSignatureError
 from authentication import *
 from middleware import *
 from Services.user_services import *
-from MongoDB.schemas import Login, UserOut, UserCreate
+from DB.schemas import Login, UserOut, UserCreate
 
 user_auth_route = APIRouter()
 

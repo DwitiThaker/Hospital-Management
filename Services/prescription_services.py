@@ -7,7 +7,7 @@ from bson.errors import InvalidId #type: ignore
 from datetime import datetime
 import logging
 
-from MongoDB.schemas import *
+from DB.schemas import *
 from configurations import get_prescription_collection
 
 

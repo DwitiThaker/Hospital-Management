@@ -1,11 +1,14 @@
 from pymongo import MongoClient #type: ignore
 from pymongo.server_api import ServerApi  # type: ignore
 from pymongo.collection import Collection  #type: ignore
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
-uri = "mongodb://localhost:27017/"
+uri = os.getenv("URI")
 
-client = MongoClient(uri, server_api=ServerApi('1'))
+client = MongoClient(uri, server_api=ServerApi(SERVER_API))
 
 
 db = client.hospital_db

@@ -3,7 +3,7 @@ from pymongo.collection import Collection
 from typing import List
 
 from Services.medicine_services import *
-from MongoDB.schemas import ReadMedicine, CreateMedicine, UpdateMedicine
+from DB.schemas import ReadMedicine, CreateMedicine, UpdateMedicine
 from middleware import require_auth, require_role
 from configurations import get_medicine_collection
 

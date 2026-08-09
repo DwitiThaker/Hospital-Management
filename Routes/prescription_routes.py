@@ -3,7 +3,7 @@ from pymongo.collection import Collection #type: ignore
 import logging
 
 
-from MongoDB.schemas import CreatePrescription
+from DB.schemas import CreatePrescription
 from configurations import get_prescription_collection, get_medicine_collection
 from Services.prescription_services import *
 from middleware import require_auth, require_role

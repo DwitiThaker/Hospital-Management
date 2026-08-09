@@ -8,7 +8,7 @@ from pymongo.errors import PyMongoError
 from datetime import datetime
 
 
-from MongoDB.schemas import ReadMedicine, CreateMedicine, UpdateMedicine
+from DB.schemas import ReadMedicine, CreateMedicine, UpdateMedicine
 
 
 logger = logging.getLogger(__name__)  

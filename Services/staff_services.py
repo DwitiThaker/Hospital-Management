@@ -8,7 +8,7 @@ from datetime import datetime
 import logging
 
 from authentication import *
-from MongoDB.schemas import *
+from DB.schemas import *
 from Services.user_services import *
 from configurations import get_user_collection
 

@@ -3,14 +3,17 @@ import logging
 from fastapi import HTTPException, Request, status
 from jose import jwt, JWTError, ExpiredSignatureError
 from datetime import datetime, timedelta, timezone
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Configuration
-SECRET_KEY = "5ef8bb3634321cc91db8fa5f037e7b83" 
-ALGORITHM = "HS256"
-TOKEN_EXPIRY = 60 
+SECRET_KEY = os.getenv("SECRET_KEY")
+ALGORITHM = os.getenv("ALGORITHM")
+TOKEN_EXPIRY = os.getenv("TOKEN_EXPIRY")
 
 
 ROLE_ACCESS = {

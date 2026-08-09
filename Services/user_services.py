@@ -1,4 +1,4 @@
-from MongoDB.models import Users
+from DB.models import Users
 from configurations import user_collection
 import logging
 from pymongo.errors import PyMongoError 
