@@ -1,4 +1,5 @@
-from datetime import datetime
+from datetime import datetime, date
+from decimal import Decimal
 from typing import List, Optional
 from pydantic import BaseModel, EmailStr, Field
 from DB.models import Role
@@ -25,22 +26,27 @@ class UserOut(BaseModel):
     is_active: bool
     role: str
 
-class MedicineItem(BaseModel):
-    medicine_id: str
-    quantity: int  
+class CreateMedicine(BaseModel):
+    name: str
+    quantity: int = Field(ge=0)
+    price: Decimal = Field(ge=0)
+    expiry: date | None = None
 
-class MedicineReadItem(BaseModel):
-    medicine_id: str
-    medicine_name: str
-    expiry: datetime
-    quantity: int  
 
-class CreatePrescription(BaseModel):
-    patient_id: str
-    patient_name: str
-    description: str
-    expiry: datetime
-    medicines: List[MedicineItem] = Field(default_factory=list)  
+class ReadMedicine(BaseModel):
+    id: str
+    name: str
+    quantity: int
+    price: Decimal
+    expiry: date | None = None
+    created_at: datetime
+    updated_at: datetime
+
+
+class UpdateMedicine(BaseModel):
+    name: str | None = None
+    price: Decimal | None = Field(default=None, ge=0)
+    expiry: date | None = None
 
 
 
