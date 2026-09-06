@@ -3,7 +3,7 @@ from datetime import datetime, timezone
 from bson import ObjectId
 from bson.errors import InvalidId
 
-from MongoDB.schemas import CreateMedicine, ReadMedicine, UpdateMedicine
+from DB.schemas import CreateMedicine, ReadMedicine, UpdateMedicine
 from Repositories.medicine_repository import MedicineRepository
 from exceptions.medicine import (
     EmptyMedicineUpdateError,
@@ -23,8 +23,8 @@ class MedicineService:
             id=str(medicine["_id"]),
             name=medicine.get("name", ""),
             quantity=medicine.get("quantity", 0),
-            price=medicine.get("price"),
-            expiry=medicine.get("expiry"),
+            price=medicine["price"].to_decimal(),
+            expiry=medicine["expiry"].date(),
             created_at=medicine.get("created_at"),
             updated_at=medicine.get("updated_at"),
         )
@@ -36,25 +36,25 @@ class MedicineService:
         except InvalidId:
             raise InvalidMedicineIdError(medicine_id)
 
-    def list_medicines(self) -> list[ReadMedicine]:
-        medicines = self.repository.get_all()
+    async def list_medicines(self) -> list[ReadMedicine]:
+        medicines = await self.repository.get_all()
 
         return [
             self._to_read_schema(medicine)
             for medicine in medicines
         ]
 
-    def get_medicine(self, medicine_id: str) -> ReadMedicine:
+    async def get_medicine(self, medicine_id: str) -> ReadMedicine:
         object_id = self._parse_object_id(medicine_id)
 
-        medicine = self.repository.get_by_id(object_id)
+        medicine = await self.repository.get_by_id(object_id)
 
         if medicine is None:
             raise MedicineNotFoundError(medicine_id)
 
         return self._to_read_schema(medicine)
 
-    def create_medicine(
+    async def create_medicine(
         self,
         data: CreateMedicine,
     ) -> ReadMedicine:
@@ -66,11 +66,11 @@ class MedicineService:
         medicine_data["created_at"] = now
         medicine_data["updated_at"] = now
 
-        medicine = self.repository.create(medicine_data)
+        medicine = await self.repository.create(medicine_data)
 
         return self._to_read_schema(medicine)
 
-    def update_medicine(
+    async def update_medicine(
         self,
         medicine_id: str,
         data: UpdateMedicine,
@@ -87,7 +87,7 @@ class MedicineService:
 
         update_data["updated_at"] = datetime.now(timezone.utc)
 
-        medicine = self.repository.update(
+        medicine = await self.repository.update(
             object_id,
             update_data,
         )
@@ -97,14 +97,14 @@ class MedicineService:
 
         return self._to_read_schema(medicine)
 
-    def delete_medicine(
+    async def delete_medicine(
         self,
         medicine_id: str,
     ) -> None:
 
         object_id = self._parse_object_id(medicine_id)
 
-        deleted = self.repository.delete(object_id)
+        deleted = await self.repository.delete(object_id)
 
         if not deleted:
             raise MedicineNotFoundError(medicine_id)

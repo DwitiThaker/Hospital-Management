@@ -30,7 +30,7 @@ class CreateMedicine(BaseModel):
     name: str
     quantity: int = Field(ge=0)
     price: Decimal = Field(ge=0)
-    expiry: date | None = None
+    expiry: date 
 
 
 class ReadMedicine(BaseModel):
@@ -49,22 +49,6 @@ class UpdateMedicine(BaseModel):
     expiry: date | None = None
 
 
-
-class CreateMedicine(BaseModel):
-    medicine_name: str
-    expiry: datetime
-    quantity: int
-
-class ReadMedicine(BaseModel):
-    medicine_name: Optional[str] = None
-    quantity: int
-    expiry: Optional[datetime] = None
-    created_at: Optional[datetime] = None
-
-class UpdateMedicine(BaseModel):
-    medicine_name: Optional[str]  = None 
-    quantity: int  = None 
-    expiry: datetime  = None 
  
 
 class PrescriptionOut(BaseModel):

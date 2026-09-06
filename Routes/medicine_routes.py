@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, status
 
 from Dependencies.medicine import get_medicine_service
-from MongoDB.schemas import CreateMedicine, ReadMedicine, UpdateMedicine
+from DB.schemas import CreateMedicine, ReadMedicine, UpdateMedicine
 from Services.medicine_services import MedicineService
 
 

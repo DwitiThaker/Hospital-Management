@@ -25,8 +25,8 @@ class Prescription(BaseModel):
     created_at: datetime
     doctor_id: str
 
-class Medicine(BaseModel):
-    title: str
-    qunatity: str
-    expiry: datetime
-    created_at: datetime 
+# class Medicine(BaseModel):
+#     title: str
+#     qunatity: str
+#     expiry: datetime
+#     created_at: datetime 

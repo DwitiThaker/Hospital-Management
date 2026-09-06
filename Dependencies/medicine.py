@@ -1,4 +1,4 @@
-from MongoDB.mongodb import medicine_collection
+from DB.mongodb import medicine_collection
 from Repositories.medicine_repository import MedicineRepository
 from Services.medicine_services import MedicineService
 
