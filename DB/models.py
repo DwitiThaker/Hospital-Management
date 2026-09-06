@@ -16,14 +16,14 @@ class Users(BaseModel):
     is_active: bool = True
 
 
-class Prescription(BaseModel):
-    patient_name: str
-    description: str
-    qunatity: int
-    completed: bool
-    expiry: datetime
-    created_at: datetime
-    doctor_id: str
+# class Prescription(BaseModel):
+#     patient_name: str
+#     description: str
+#     qunatity: int
+#     completed: bool
+#     expiry: datetime
+#     created_at: datetime
+#     doctor_id: str
 
 # class Medicine(BaseModel):
 #     title: str
