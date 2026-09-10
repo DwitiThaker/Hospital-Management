@@ -4,29 +4,29 @@ from typing import List, Optional
 from pydantic import BaseModel, EmailStr, Field
 from DB.models import Role
 
-
-class Login(BaseModel):
-    email: str
-    password: str
-
-
-class PasswordUpdate(BaseModel):
-    old_password: str
-    new_password: str
+# class Login(BaseModel):
+#     email: str
+#     password: str
 
 
-class UserCreate(BaseModel):
-    username: str
-    password: str
-    email: EmailStr
-    is_active: bool = True
+# class PasswordUpdate(BaseModel):
+#     old_password: str
+#     new_password: str
 
 
-class UserOut(BaseModel):
-    username: str
-    email: EmailStr
-    is_active: bool
-    role: str
+# class UserCreate(BaseModel):
+#     username: str
+#     password: str
+#     email: EmailStr
+#     is_active: bool = True
+
+
+# class UserOut(BaseModel):
+#     username: str
+#     email: EmailStr
+#     is_active: bool
+#     role: str
+
 
 
 class CreateMedicine(BaseModel):

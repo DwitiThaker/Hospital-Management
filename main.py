@@ -4,7 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from Routes import (
     # staff_routes,
     # user_routes,
-    # prescription_routes,
+    prescription_routes,
     medicine_routes,
 )
 
@@ -12,6 +12,9 @@ from exceptions.handlers import (
     medicine_not_found_handler,
     invalid_medicine_id_handler,
     empty_medicine_update_handler,
+    prescription_not_found_handler,
+    invalid_prescription_id_handler,
+    empty_prescription_update_handler,
 )
 
 from exceptions.medicine import (
@@ -20,6 +23,11 @@ from exceptions.medicine import (
     EmptyMedicineUpdateError,
 )
 
+from exceptions.prescription import (
+    PrescriptionNotFoundError,
+    InvalidPrescriptionIdError,
+    EmptyPrescriptionUpdateError,
+)
 
 app = FastAPI()
 router = APIRouter()
@@ -41,6 +49,14 @@ app.add_exception_handler(
     empty_medicine_update_handler,
 )
 
+app.add_exception_handler(PrescriptionNotFoundError, prescription_not_found_handler)
+
+app.add_exception_handler(InvalidPrescriptionIdError, invalid_prescription_id_handler)
+
+app.add_exception_handler(
+    EmptyPrescriptionUpdateError, empty_prescription_update_handler
+)
+
 
 # CORS
 app.add_middleware(
@@ -58,6 +74,6 @@ def home():
 
 
 # app.include_router(user_routes.user_auth_route)
-# app.include_router(prescription_routes.prescription_crud_route)
+app.include_router(prescription_routes.prescription_router)
 # app.include_router(staff_routes.staff_router)
 app.include_router(medicine_routes.medicine_router)
