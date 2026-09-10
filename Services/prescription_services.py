@@ -92,6 +92,7 @@ class PrescriptionService:
 
         prescription_data["created_at"] = now
         prescription_data["updated_at"] = now
+        prescription_data["issued_at"] = now
 
         prescription = await self.repository.create(prescription_data)
 

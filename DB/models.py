@@ -2,6 +2,7 @@ from pydantic import BaseModel, EmailStr
 from datetime import datetime
 from enum import Enum
 
+
 class Role(str, Enum):
     management = "management"
     doctor = "doctor"
@@ -11,7 +12,7 @@ class Role(str, Enum):
 class Users(BaseModel):
     username: str
     password: str
-    email: EmailStr   
+    email: EmailStr
     role: str = "management"
     is_active: bool = True
 
@@ -29,4 +30,4 @@ class Users(BaseModel):
 #     title: str
 #     qunatity: str
 #     expiry: datetime
-#     created_at: datetime 
+#     created_at: datetime
