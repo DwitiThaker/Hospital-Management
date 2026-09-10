@@ -1,0 +1,24 @@
+name: CD
+
+# This workflow runs only when we manually click Run workflow in GitHub Actions.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  delivery-placeholder:
+    name: CD preparation
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Show delivery status
+        run: |
+          echo "CD workflow is configured."
+          echo "Docker image build is not added yet."
+          echo "Container registry push is not added yet."
+          echo "AWS deployment is not added yet."
