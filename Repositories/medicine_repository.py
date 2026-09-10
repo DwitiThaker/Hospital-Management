@@ -97,10 +97,7 @@ class MedicineRepository:
             )
 
         # Convert Python date to MongoDB datetime
-        if (
-            "expiry" in update_data
-            and update_data["expiry"] is not None
-        ):
+        if ("expiry" in update_data and update_data["expiry"] is not None):
             update_data["expiry"] = datetime.combine(
                 update_data["expiry"],
                 time.min,

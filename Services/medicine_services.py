@@ -39,10 +39,7 @@ class MedicineService:
     async def list_medicines(self) -> list[ReadMedicine]:
         medicines = await self.repository.get_all()
 
-        return [
-            self._to_read_schema(medicine)
-            for medicine in medicines
-        ]
+        return [self._to_read_schema(medicine) for medicine in medicines]
 
     async def get_medicine(self, medicine_id: str) -> ReadMedicine:
         object_id = self._parse_object_id(medicine_id)
@@ -78,9 +75,7 @@ class MedicineService:
 
         object_id = self._parse_object_id(medicine_id)
 
-        update_data = data.model_dump(
-            exclude_unset=True
-        )
+        update_data = data.model_dump(exclude_unset=True)
 
         if not update_data:
             raise EmptyMedicineUpdateError()
