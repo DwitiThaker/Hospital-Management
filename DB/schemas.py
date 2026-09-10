@@ -4,33 +4,35 @@ from typing import List, Optional
 from pydantic import BaseModel, EmailStr, Field
 from DB.models import Role
 
-
-class Login(BaseModel):
-    email: str
-    password: str
-    
-class PasswordUpdate(BaseModel):
-    old_password: str
-    new_password: str
-
-class UserCreate(BaseModel):
-    username: str
-    password: str
-    email: EmailStr
-    is_active: bool = True
+# class Login(BaseModel):
+#     email: str
+#     password: str
 
 
-class UserOut(BaseModel):
-    username: str
-    email: EmailStr
-    is_active: bool
-    role: str
+# class PasswordUpdate(BaseModel):
+#     old_password: str
+#     new_password: str
+
+
+# class UserCreate(BaseModel):
+#     username: str
+#     password: str
+#     email: EmailStr
+#     is_active: bool = True
+
+
+# class UserOut(BaseModel):
+#     username: str
+#     email: EmailStr
+#     is_active: bool
+#     role: str
+
 
 class CreateMedicine(BaseModel):
     name: str
     quantity: int = Field(ge=0)
     price: Decimal = Field(ge=0)
-    expiry: date 
+    expiry: date
 
 
 class ReadMedicine(BaseModel):
@@ -49,30 +51,29 @@ class UpdateMedicine(BaseModel):
     expiry: date | None = None
 
 
- 
-
-class PrescriptionOut(BaseModel):
+class CreatePrescription(BaseModel):
     patient_id: str
     patient_name: str
     description: str
-    expiry: datetime
-    medicines: List[MedicineItem] = Field(default_factory=list)
+    duration_days: int
+    medicines: List[PrescriptionMedicine] = Field(default_factory=list)
+
 
 class ReadPrescription(BaseModel):
     prescription_id: str
     user_id: str
     patient_name: str
     description: str
-    completed: bool 
-    medicines: List[ReadMedicine] = Field(default_factory=list)  
-    expiry: datetime
-    created_at: datetime
+    medicines: List[PrescriptionMedicine] = Field(default_factory=list)
+    duration_days: int
+    issued_at: datetime
+    updated_at: datetime
 
 
 class UpdatePrescription(BaseModel):
-    medicines: Optional[List[MedicineItem]] = None
-    description: Optional[str] = None
-    completed: Optional[bool] = None
+    medicines: list[PrescriptionMedicine] | None = None
+    description: str | None = None
+    duration_days: int | None = Field(default=None, gt=0)
 
 
 class FetchforManager(BaseModel):
@@ -80,7 +81,7 @@ class FetchforManager(BaseModel):
     user_id: str
     patient_name: str
     description: str
-    completed: bool 
-    medicines: List[ReadMedicine] = Field(default_factory=list)  
+    completed: bool
+    medicines: List[ReadMedicine] = Field(default_factory=list)
     expiry: datetime
     created_at: datetime
