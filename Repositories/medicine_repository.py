@@ -16,15 +16,10 @@ class MedicineRepository:
 
         # Convert Python Decimal to MongoDB Decimal128
         if "price" in medicine_data:
-            medicine_data["price"] = Decimal128(
-                medicine_data["price"]
-            )
+            medicine_data["price"] = Decimal128(medicine_data["price"])
 
         # Convert Python date to MongoDB datetime
-        if (
-            "expiry" in medicine_data
-            and medicine_data["expiry"] is not None
-        ):
+        if "expiry" in medicine_data and medicine_data["expiry"] is not None:
             medicine_data["expiry"] = datetime.combine(
                 medicine_data["expiry"],
                 time.min,
@@ -33,14 +28,10 @@ class MedicineRepository:
 
         result = await self.collection.insert_one(medicine_data)
 
-        created_medicine = await self.collection.find_one(
-            {"_id": result.inserted_id}
-        )
+        created_medicine = await self.collection.find_one({"_id": result.inserted_id})
 
         if created_medicine is None:
-            raise RuntimeError(
-                "Medicine was created but could not be retrieved"
-            )
+            raise RuntimeError("Medicine was created but could not be retrieved")
 
         return created_medicine
 
@@ -49,9 +40,7 @@ class MedicineRepository:
         medicine_id: ObjectId,
     ) -> Optional[dict]:
 
-        return await self.collection.find_one(
-            {"_id": medicine_id}
-        )
+        return await self.collection.find_one({"_id": medicine_id})
 
     async def get_all(self) -> list[dict]:
 
@@ -64,21 +53,21 @@ class MedicineRepository:
         name: str,
     ) -> Optional[dict]:
 
-        return await self.collection.find_one(
-            {"name": name}
-        )
+        return await self.collection.find_one({"name": name})
 
     async def search(
         self,
         query: str,
     ) -> list[dict]:
 
-        cursor = self.collection.find({
-            "name": {
-                "$regex": query,
-                "$options": "i",
+        cursor = self.collection.find(
+            {
+                "name": {
+                    "$regex": query,
+                    "$options": "i",
+                }
             }
-        })
+        )
 
         return await cursor.to_list()
 
@@ -92,15 +81,10 @@ class MedicineRepository:
 
         # Convert Python Decimal to MongoDB Decimal128
         if "price" in update_data:
-            update_data["price"] = Decimal128(
-                update_data["price"]
-            )
+            update_data["price"] = Decimal128(update_data["price"])
 
         # Convert Python date to MongoDB datetime
-        if (
-            "expiry" in update_data
-            and update_data["expiry"] is not None
-        ):
+        if "expiry" in update_data and update_data["expiry"] is not None:
             update_data["expiry"] = datetime.combine(
                 update_data["expiry"],
                 time.min,
@@ -115,17 +99,13 @@ class MedicineRepository:
         if result.matched_count == 0:
             return None
 
-        return await self.collection.find_one(
-            {"_id": medicine_id}
-        )
+        return await self.collection.find_one({"_id": medicine_id})
 
     async def delete(
         self,
         medicine_id: ObjectId,
     ) -> bool:
 
-        result = await self.collection.delete_one(
-            {"_id": medicine_id}
-        )
+        result = await self.collection.delete_one({"_id": medicine_id})
 
         return result.deleted_count > 0
