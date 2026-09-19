@@ -28,6 +28,7 @@ from DB.models import Role
 #     role: str
 
 
+
 class CreateMedicine(BaseModel):
     name: str
     quantity: int = Field(ge=0)
@@ -61,7 +62,8 @@ class CreatePrescription(BaseModel):
 
 class ReadPrescription(BaseModel):
     prescription_id: str
-    user_id: str
+    doctor_id: str
+    patient_id: str
     patient_name: str
     description: str
     medicines: List[PrescriptionMedicine] = Field(default_factory=list)
@@ -141,3 +143,5 @@ class FetchforManager(BaseModel):
     medicines: List[ReadMedicine] = Field(default_factory=list)
     expiry: datetime
     created_at: datetime
+
+

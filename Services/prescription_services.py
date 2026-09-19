@@ -75,7 +75,6 @@ class PrescriptionService:
 
         # Convert doctor ID from API string to MongoDB ObjectId
         try:
-            print(f"doctor_id in prescription_Services", type(doctor_id))
             doctor_object_id = ObjectId(doctor_id)
         except InvalidId:
             raise ValueError("Invalid doctor ID")
@@ -93,6 +92,7 @@ class PrescriptionService:
 
         prescription_data["created_at"] = now
         prescription_data["updated_at"] = now
+        prescription_data["issued_at"] = now
 
         prescription = await self.repository.create(prescription_data)
 
