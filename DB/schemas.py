@@ -87,11 +87,7 @@ class CreatePatient(BaseModel):
     full_name: str = Field(min_length=2, max_length=100)
     date_of_birth: date
     gender: str = Field(min_length=1, max_length=20)
-        phone: str = Field(
-        min_length=10,
-        max_length=15,
-        pattern=r"^\d+$"
-    )
+    phone: str = Field(min_length=10, max_length=15, pattern=r"^\d+$")
     email: EmailStr | None = None
     address: str | None = None
     blood_group: str | None = None
@@ -136,7 +132,6 @@ class UpdatePatient(BaseModel):
     address: str | None = None
     blood_group: str | None = None
     emergency_contact: str | None = None
-    
 
 
 class FetchforManager(BaseModel):
