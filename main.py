@@ -6,6 +6,7 @@ from Routes import (
     # user_routes,
     prescription_routes,
     medicine_routes,
+    patient_routes,
 )
 
 from exceptions.handlers import (
@@ -15,6 +16,9 @@ from exceptions.handlers import (
     prescription_not_found_handler,
     invalid_prescription_id_handler,
     empty_prescription_update_handler,
+    patient_not_found_handler,
+    invalid_patient_id_handler,
+    empty_patient_update_handler,
 )
 
 from exceptions.medicine import (
@@ -27,6 +31,12 @@ from exceptions.prescription import (
     PrescriptionNotFoundError,
     InvalidPrescriptionIdError,
     EmptyPrescriptionUpdateError,
+)
+
+from exceptions.patient import (
+    PatientNotFoundError,
+    InvalidPatientIdError,
+    EmptyPatientUpdateError,
 )
 
 app = FastAPI()
@@ -49,6 +59,7 @@ app.add_exception_handler(
     empty_medicine_update_handler,
 )
 
+
 app.add_exception_handler(PrescriptionNotFoundError, prescription_not_found_handler)
 
 app.add_exception_handler(InvalidPrescriptionIdError, invalid_prescription_id_handler)
@@ -56,6 +67,12 @@ app.add_exception_handler(InvalidPrescriptionIdError, invalid_prescription_id_ha
 app.add_exception_handler(
     EmptyPrescriptionUpdateError, empty_prescription_update_handler
 )
+
+app.add_exception_handler(EmptyPatientUpdateError, empty_patient_update_handler)
+
+app.add_exception_handler(InvalidPatientIdError, invalid_patient_id_handler)
+
+app.add_exception_handler(PatientNotFoundError, patient_not_found_handler)
 
 
 # CORS
@@ -77,3 +94,5 @@ def home():
 app.include_router(prescription_routes.prescription_router)
 # app.include_router(staff_routes.staff_router)
 app.include_router(medicine_routes.medicine_router)
+
+app.include_router(patient_routes.patient_router)
