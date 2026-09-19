@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, Request
+from bson import ObjectId
 
 from DB.schemas import (
     CreatePrescription,
@@ -6,7 +7,7 @@ from DB.schemas import (
     UpdatePrescription,
 )
 from Services.prescription_services import PrescriptionService
-from Dependencies.prescription_dependencies import get_prescription_service
+from Dependencies.prescription import get_prescription_service
 
 prescription_router = APIRouter(prefix="/prescriptions", tags=["Prescriptions"])
 
@@ -44,7 +45,9 @@ async def create_prescription(
     request: Request,
     service: PrescriptionService = Depends(get_prescription_service),
 ):
-    doctor_id = request.state.user_id
+    # TODO: Replace temporary doctor_id with authenticated user's ObjectId
+
+    doctor_id = ObjectId()
 
     return await service.create_prescription(
         data,
