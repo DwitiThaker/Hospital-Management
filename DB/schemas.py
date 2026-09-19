@@ -3,6 +3,7 @@ from decimal import Decimal
 from typing import List, Optional
 from pydantic import BaseModel, EmailStr, Field
 from DB.models import Role
+from enum import Enum
 
 # class Login(BaseModel):
 #     email: str
@@ -26,7 +27,6 @@ from DB.models import Role
 #     email: EmailStr
 #     is_active: bool
 #     role: str
-
 
 
 class CreateMedicine(BaseModel):
@@ -83,15 +83,21 @@ class PrescriptionMedicine(BaseModel):
     quantity: int = Field(gt=0)
 
 
+class Gender(str, Enum):
+    MALE = "male"
+    FEMALE = "female"
+    OTHER = "other"
+
+
 class CreatePatient(BaseModel):
     full_name: str = Field(min_length=2, max_length=100)
     date_of_birth: date
-    gender: str = Field(min_length=1, max_length=20)
+    gender: Gender
     phone: str = Field(min_length=10, max_length=15, pattern=r"^\d+$")
     email: EmailStr | None = None
     address: str | None = None
     blood_group: str | None = None
-    emergency_contact: str | None = None
+    emergency_contact: str = Field(min_length=10, max_length=15, pattern=r"^\d+$")
 
 
 class ReadPatient(BaseModel):
@@ -117,16 +123,9 @@ class UpdatePatient(BaseModel):
         max_length=100,
     )
     date_of_birth: date | None = None
-    gender: str | None = Field(
-        default=None,
-        min_length=1,
-        max_length=20,
-    )
-    phone: str | None = Field(
-        default=None,
-        min_length=7,
-        max_length=20,
-    )
+    gender: Gender | None = None
+
+    phone: str | None = Field(min_length=10, max_length=15, pattern=r"^\d+$")
 
     email: EmailStr | None = None
     address: str | None = None
@@ -143,5 +142,3 @@ class FetchforManager(BaseModel):
     medicines: List[ReadMedicine] = Field(default_factory=list)
     expiry: datetime
     created_at: datetime
-
-
