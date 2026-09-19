@@ -143,3 +143,5 @@ class FetchforManager(BaseModel):
     medicines: List[ReadMedicine] = Field(default_factory=list)
     expiry: datetime
     created_at: datetime
+
+
