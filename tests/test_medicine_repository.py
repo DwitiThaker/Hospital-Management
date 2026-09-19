@@ -1,7 +1,9 @@
+from decimal import Decimal
 from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 from bson import ObjectId
+from bson.decimal128 import Decimal128
 
 from Repositories.medicine_repository import MedicineRepository
 
@@ -35,17 +37,21 @@ def medicine_document(medicine_id):
         "_id": medicine_id,
         "name": "Paracetamol",
         "quantity": 100,
-        "price": 25,
+        "price": Decimal128("25"),
         "expiry": "2027-12-31",
     }
 
 
 @pytest.mark.asyncio
-async def test_create_medicine(repository, collection, medicine_document):
+async def test_create_medicine(
+    repository,
+    collection,
+    medicine_document,
+):
     medicine_data = {
         "name": "Paracetamol",
         "quantity": 100,
-        "price": 25,
+        "price": Decimal("25"),
     }
 
     insert_result = MagicMock()
@@ -56,10 +62,15 @@ async def test_create_medicine(repository, collection, medicine_document):
 
     result = await repository.create(medicine_data)
 
-    collection.insert_one.assert_awaited_once_with(medicine_data)
-    collection.find_one.assert_awaited_once_with(
-        {"_id": medicine_document["_id"]}
-    )
+    expected_data = {
+        "name": "Paracetamol",
+        "quantity": 100,
+        "price": Decimal128("25"),
+    }
+
+    collection.insert_one.assert_awaited_once_with(expected_data)
+
+    collection.find_one.assert_awaited_once_with({"_id": medicine_document["_id"]})
 
     assert result == medicine_document
 
@@ -73,7 +84,7 @@ async def test_create_medicine_raises_when_document_cannot_be_retrieved(
     medicine_data = {
         "name": "Paracetamol",
         "quantity": 100,
-        "price": 25,
+        "price": Decimal("25"),
     }
 
     insert_result = MagicMock()
@@ -82,7 +93,10 @@ async def test_create_medicine_raises_when_document_cannot_be_retrieved(
     collection.insert_one.return_value = insert_result
     collection.find_one.return_value = None
 
-    with pytest.raises(RuntimeError, match="could not be retrieved"):
+    with pytest.raises(
+        RuntimeError,
+        match="could not be retrieved",
+    ):
         await repository.create(medicine_data)
 
 
@@ -97,9 +111,7 @@ async def test_get_medicine_by_id(
 
     result = await repository.get_by_id(medicine_id)
 
-    collection.find_one.assert_awaited_once_with(
-        {"_id": medicine_id}
-    )
+    collection.find_one.assert_awaited_once_with({"_id": medicine_id})
 
     assert result == medicine_document
 
@@ -178,9 +190,7 @@ async def test_update_medicine(
         {"$set": update_data},
     )
 
-    collection.find_one.assert_awaited_once_with(
-        {"_id": medicine_id}
-    )
+    collection.find_one.assert_awaited_once_with({"_id": medicine_id})
 
     assert result == medicine_document
 
@@ -223,9 +233,7 @@ async def test_delete_medicine(
 
     result = await repository.delete(medicine_id)
 
-    collection.delete_one.assert_awaited_once_with(
-        {"_id": medicine_id}
-    )
+    collection.delete_one.assert_awaited_once_with({"_id": medicine_id})
 
     assert result is True
 

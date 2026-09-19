@@ -83,6 +83,57 @@ class PrescriptionMedicine(BaseModel):
     quantity: int = Field(gt=0)
 
 
+class CreatePatient(BaseModel):
+    full_name: str = Field(min_length=2, max_length=100)
+    date_of_birth: date
+    gender: str = Field(min_length=1, max_length=20)
+    phone: str = Field(min_length=10, max_length=15, pattern=r"^\d+$")
+    email: EmailStr | None = None
+    address: str | None = None
+    blood_group: str | None = None
+    emergency_contact: str | None = None
+
+
+class ReadPatient(BaseModel):
+    patient_id: str
+    full_name: str
+    date_of_birth: date
+    gender: str
+    phone: str
+
+    email: EmailStr | None = None
+    address: str | None = None
+    blood_group: str | None = None
+    emergency_contact: str | None = None
+
+    created_at: datetime
+    updated_at: datetime
+
+
+class UpdatePatient(BaseModel):
+    full_name: str | None = Field(
+        default=None,
+        min_length=2,
+        max_length=100,
+    )
+    date_of_birth: date | None = None
+    gender: str | None = Field(
+        default=None,
+        min_length=1,
+        max_length=20,
+    )
+    phone: str | None = Field(
+        default=None,
+        min_length=7,
+        max_length=20,
+    )
+
+    email: EmailStr | None = None
+    address: str | None = None
+    blood_group: str | None = None
+    emergency_contact: str | None = None
+
+
 class FetchforManager(BaseModel):
     prescription_id: str
     user_id: str
@@ -92,3 +143,5 @@ class FetchforManager(BaseModel):
     medicines: List[ReadMedicine] = Field(default_factory=list)
     expiry: datetime
     created_at: datetime
+
+
