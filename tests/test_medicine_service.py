@@ -4,6 +4,7 @@ from unittest.mock import AsyncMock
 
 import pytest
 from bson import ObjectId
+from bson.decimal128 import Decimal128
 
 from DB.schemas import CreateMedicine, UpdateMedicine
 from Services.medicine_services import MedicineService
@@ -32,8 +33,8 @@ async def test_create_medicine(service, repository):
         "_id": medicine_id,
         "name": "Paracetamol",
         "quantity": 100,
-        "price": Decimal("25.50"),
-        "expiry": date(2027, 12, 31),
+        "price": Decimal128("25.50"),
+        "expiry": datetime(2027, 12, 31),
         "created_at": datetime.now(timezone.utc),
         "updated_at": datetime.now(timezone.utc),
     }
@@ -51,6 +52,7 @@ async def test_create_medicine(service, repository):
     assert result.name == "Paracetamol"
     assert result.quantity == 100
     assert result.price == Decimal("25.50")
+    assert result.expiry == date(2027, 12, 31)
 
     repository.create.assert_awaited_once()
 
@@ -63,8 +65,8 @@ async def test_get_medicine(service, repository):
         "_id": medicine_id,
         "name": "Ibuprofen",
         "quantity": 50,
-        "price": Decimal("40.00"),
-        "expiry": date(2027, 6, 30),
+        "price": Decimal128("40.00"),
+        "expiry": datetime(2027, 6, 30),
         "created_at": datetime.now(timezone.utc),
         "updated_at": datetime.now(timezone.utc),
     }
@@ -74,6 +76,8 @@ async def test_get_medicine(service, repository):
     assert result.id == str(medicine_id)
     assert result.name == "Ibuprofen"
     assert result.quantity == 50
+    assert result.price == Decimal("40.00")
+    assert result.expiry == date(2027, 6, 30)
 
     repository.get_by_id.assert_awaited_once_with(medicine_id)
 
@@ -93,6 +97,7 @@ async def test_get_medicine_invalid_id(service):
     with pytest.raises(InvalidMedicineIdError):
         await service.get_medicine("not-a-valid-object-id")
 
+
 @pytest.mark.asyncio
 async def test_update_medicine(service, repository):
     medicine_id = ObjectId()
@@ -101,22 +106,24 @@ async def test_update_medicine(service, repository):
         "_id": medicine_id,
         "name": "Paracetamol",
         "quantity": 100,
-        "price": Decimal("30.00"),
-        "expiry": date(2028, 1, 1),
+        "price": Decimal128("30.00"),
+        "expiry": datetime(2028, 1, 1),
         "created_at": datetime.now(timezone.utc),
         "updated_at": datetime.now(timezone.utc),
     }
 
-    data = UpdateMedicine(
-        price=Decimal("30.00")
-    )
+    data = UpdateMedicine(price=Decimal("30.00"))
 
     result = await service.update_medicine(
         str(medicine_id),
         data,
     )
 
+    assert result.id == str(medicine_id)
+    assert result.name == "Paracetamol"
+    assert result.quantity == 100
     assert result.price == Decimal("30.00")
+    assert result.expiry == date(2028, 1, 1)
 
     repository.update.assert_awaited_once()
 
@@ -140,9 +147,7 @@ async def test_delete_medicine(service, repository):
 
     repository.delete.return_value = True
 
-    result = await service.delete_medicine(
-        str(medicine_id)
-    )
+    result = await service.delete_medicine(str(medicine_id))
 
     assert result is None
 
@@ -158,8 +163,8 @@ async def test_list_medicines(service, repository):
             "_id": medicine_id,
             "name": "Paracetamol",
             "quantity": 100,
-            "price": Decimal("25.50"),
-            "expiry": date(2027, 12, 31),
+            "price": Decimal128("25.50"),
+            "expiry": datetime(2027, 12, 31),
             "created_at": datetime.now(timezone.utc),
             "updated_at": datetime.now(timezone.utc),
         }
@@ -170,5 +175,8 @@ async def test_list_medicines(service, repository):
     assert len(result) == 1
     assert result[0].id == str(medicine_id)
     assert result[0].name == "Paracetamol"
+    assert result[0].quantity == 100
+    assert result[0].price == Decimal("25.50")
+    assert result[0].expiry == date(2027, 12, 31)
 
     repository.get_all.assert_awaited_once()
