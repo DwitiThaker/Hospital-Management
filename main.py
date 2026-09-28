@@ -1,5 +1,8 @@
 from fastapi import FastAPI, APIRouter
 from fastapi.middleware.cors import CORSMiddleware
+from contextlib import asynccontextmanager
+
+from DB.redis import redis_client
 
 from Routes import (
     # staff_routes,
@@ -39,8 +42,23 @@ from exceptions.patient import (
     EmptyPatientUpdateError,
 )
 
-app = FastAPI()
-router = APIRouter()
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup
+    yield
+
+    # Shutdown
+    await redis_client.aclose()
+
+
+app = FastAPI(lifespan=lifespan)
+
+
+@app.get("/redis-health")
+async def redis_health():
+    await redis_client.ping()
+    return {"redis": "connected"}
 
 
 # Exception handlers

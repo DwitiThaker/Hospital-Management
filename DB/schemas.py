@@ -125,7 +125,9 @@ class UpdatePatient(BaseModel):
     date_of_birth: date | None = None
     gender: Gender | None = None
 
-    phone: str | None = Field(min_length=10, max_length=15, pattern=r"^\d+$")
+    phone: str | None = Field(
+        default=None, min_length=10, max_length=15, pattern=r"^\d+$"
+    )
 
     email: EmailStr | None = None
     address: str | None = None
