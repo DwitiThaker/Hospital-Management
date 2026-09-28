@@ -13,6 +13,12 @@ from exceptions.prescription import (
     EmptyPrescriptionUpdateError,
 )
 
+from exceptions.patient import (
+    PatientNotFoundError,
+    InvalidPatientIdError,
+    EmptyPatientUpdateError,
+)
+
 
 async def medicine_not_found_handler(
     request: Request,
@@ -77,6 +83,42 @@ async def invalid_prescription_id_handler(
 async def empty_prescription_update_handler(
     request: Request,
     exc: EmptyPrescriptionUpdateError,
+) -> JSONResponse:
+    return JSONResponse(
+        status_code=400,
+        content={
+            "detail": str(exc),
+        },
+    )
+
+
+async def patient_not_found_handler(
+    request: Request,
+    exc: PatientNotFoundError,
+) -> JSONResponse:
+    return JSONResponse(
+        status_code=404,
+        content={
+            "detail": str(exc),
+        },
+    )
+
+
+async def invalid_patient_id_handler(
+    request: Request,
+    exc: InvalidPatientIdError,
+) -> JSONResponse:
+    return JSONResponse(
+        status_code=400,
+        content={
+            "detail": str(exc),
+        },
+    )
+
+
+async def empty_patient_update_handler(
+    request: Request,
+    exc: EmptyPatientUpdateError,
 ) -> JSONResponse:
     return JSONResponse(
         status_code=400,

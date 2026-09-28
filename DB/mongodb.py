@@ -21,6 +21,4 @@ db = client["hospital_db"]
 user_collection = db["user"]
 prescription_collection = db["prescriptions"]
 medicine_collection = db["medicine"]
-
-
-
+patient_collection = db["patient"]
